@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How Was Your Experience? | FEEL IN SAUDIA</title>
+<meta name="description" content="Thank you for dining at FEEL IN SAUDIA. Share your feedback on Google or Zomato.">
+<meta name="theme-color" content="#0E0A08">
+
+<style>
+  /* ------------------------------------------------------------------
+     FEEL IN SAUDIA | Review landing page
+     Palette
+       Espresso black  #0E0A08   page background
+       Gold            #D4AF5A   accents, borders, buttons
+       Light gold      #EBCF82   button highlight
+       Deep gold       #B58A38   button shade
+       Warm cream      #F6ECD9   headings
+       Muted cream     #CDBFA8   body copy
+       Ink brown       #1A120D   text on gold buttons
+     Type: serif (Palatino / Georgia) for headings, system sans for body
+     ------------------------------------------------------------------ */
+  :root {
+    --bg: #0E0A08;
+    --gold-light: #EBCF82;
+    --gold: #D4AF5A;
+    --gold-deep: #B58A38;
+    --cream: #F6ECD9;
+    --cream-muted: #CDBFA8;
+    --ink: #1A120D;
+    --line: rgba(212, 175, 90, 0.38);
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--cream);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Warm spice-coloured glows (saffron, paprika, gold) + faint geometric lattice */
+  .bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(900px 520px at 50% -8%, rgba(222, 128, 44, 0.24), transparent 62%),
+      radial-gradient(640px 460px at 100% 105%, rgba(170, 46, 34, 0.18), transparent 62%),
+      radial-gradient(560px 380px at 0% 100%, rgba(212, 175, 90, 0.12), transparent 62%);
+  }
+  .bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23D4AF5A' stroke-opacity='.10' stroke-width='1'%3E%3Crect x='14' y='14' width='52' height='52'/%3E%3Crect x='14' y='14' width='52' height='52' transform='rotate(45 40 40)'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 80px 80px;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 35%, #000 0%, transparent 72%);
+            mask-image: radial-gradient(ellipse at 50% 35%, #000 0%, transparent 72%);
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 26px;
+    padding:
+      max(28px, env(safe-area-inset-top))
+      max(16px, env(safe-area-inset-right))
+      max(24px, env(safe-area-inset-bottom))
+      max(16px, env(safe-area-inset-left));
+  }
+
+  .card {
+    width: 100%;
+    max-width: 520px;
+    text-align: center;
+    padding: 34px 18px 30px;
+    border-radius: 28px;
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(32, 22, 16, 0.88), rgba(16, 11, 8, 0.92));
+    box-shadow:
+      0 30px 70px -30px rgba(0, 0, 0, 0.85),
+      0 0 0 6px rgba(212, 175, 90, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+  @media (min-width: 600px) {
+    .card { padding: 40px 44px 34px; }
+  }
+
+  /* Official logo: shown whole, never stretched or cropped */
+  .logo {
+    margin: 0 auto 22px;
+    width: clamp(180px, 56vw, 220px);
+    padding: 6px;
+    border-radius: 24px;
+    background: linear-gradient(145deg, var(--gold-light), var(--gold-deep));
+    box-shadow: 0 18px 40px -18px rgba(212, 175, 90, 0.5);
+  }
+  .logo[hidden] { display: none; }
+  .logo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 18px;
+  }
+
+  .brand {
+    margin: 0 0 10px;
+    padding-left: 0.34em; /* balances the trailing letter-spacing */
+    font-family: var(--serif);
+    font-size: clamp(1.15rem, 4.8vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  h1 {
+    margin: 0 0 14px;
+    font-family: var(--serif);
+    font-size: clamp(2rem, 8.4vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.12;
+    color: var(--cream);
+    text-wrap: balance;
+  }
+
+  .sub {
+    margin: 0 auto;
+    max-width: 34ch;
+    font-size: clamp(1rem, 3.6vw, 1.1rem);
+    color: var(--cream-muted);
+    text-wrap: balance;
+  }
+
+  /* Fork + spoon divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    max-width: 320px;
+    margin: 24px auto 26px;
+  }
+  .divider::before,
+  .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .divider::after { background: linear-gradient(270deg, transparent, var(--gold)); }
+  .divider svg { flex: none; width: 30px; height: 30px; color: var(--gold); }
+
+  .actions { display: grid; gap: 14px; }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 78px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    color: var(--ink);
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold) 55%, var(--gold-deep));
+    box-shadow:
+      0 12px 26px -12px rgba(212, 175, 90, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  }
+  @media (hover: hover) {
+    .btn:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.07);
+      box-shadow:
+        0 18px 34px -12px rgba(235, 207, 130, 0.75),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+    .btn:hover .arrow { transform: translate(3px, -3px); }
+  }
+  .btn:active { transform: translateY(0); }
+  .btn:focus-visible { outline: 3px solid var(--cream); outline-offset: 4px; }
+
+  .icon {
+    flex: none;
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 4px 10px -4px rgba(0, 0, 0, 0.45);
+  }
+  .icon--google { background: #FFFFFF; border-radius: 50%; }
+  .icon--google svg { width: 24px; height: 24px; }
+  .icon--zomato { background: #E23744; border-radius: 13px; }
+  .icon--zomato svg { width: 100%; height: 100%; }
+
+  .label {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    line-height: 1.25;
+  }
+  .label strong { font-size: clamp(1.05rem, 4.4vw, 1.2rem); font-weight: 700; }
+  .label small {
+    margin-top: 3px;
+    font-size: 0.86rem;
+    font-weight: 500;
+    color: rgba(26, 18, 13, 0.8);
+  }
+
+  .arrow {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    transition: transform 0.25s ease;
+  }
+
+  .note { margin: 22px 0 0; font-size: 0.9rem; color: var(--cream-muted); }
+
+  .footer {
+    margin: 0;
+    text-align: center;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    color: #B3A58D;
+  }
+  .footer span { color: var(--gold); font-weight: 600; }
+
+  /* ------------------------------------------------------------------
+     Review helper: the customer's own answers become an editable draft
+     ------------------------------------------------------------------ */
+  .vh {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .helper {
+    margin-top: 26px;
+    padding-top: 26px;
+    border-top: 1px solid var(--line);
+    text-align: left;
+  }
+  .helper summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 66px;
+    padding: 12px 16px;
+    list-style: none;
+    cursor: pointer;
+    color: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: rgba(212, 175, 90, 0.07);
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+  .helper summary::-webkit-details-marker { display: none; }
+  .helper summary:focus-visible { outline: 3px solid var(--cream); outline-offset: 3px; }
+  @media (hover: hover) {
+    .helper summary:hover { background: rgba(212, 175, 90, 0.13); border-color: var(--gold); }
+  }
+  .helper .t { flex: 1; display: flex; flex-direction: column; line-height: 1.3; }
+  .helper .t strong { font-family: var(--serif); font-size: 1.1rem; color: var(--cream); }
+  .helper .t small { margin-top: 2px; font-size: 0.86rem; color: var(--cream-muted); }
+  .helper .chev { flex: none; width: 20px; height: 20px; color: var(--gold); transition: transform 0.25s ease; }
+  .helper details[open] .chev { transform: rotate(180deg); }
+
+  .hform { display: grid; gap: 18px; margin-top: 20px; }
+  .hform .lead { margin: 0; font-size: 0.95rem; color: var(--cream-muted); }
+
+  .aspect { margin: 0; padding: 0; border: 0; min-width: 0; }
+  .aspect legend { margin-bottom: 8px; padding: 0; font-size: 0.98rem; font-weight: 600; color: var(--cream); }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill { position: relative; flex: 1 1 auto; }
+  .pill span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 8px 12px;
+    text-align: center;
+    font-size: 0.92rem;
+    color: var(--cream);
+    cursor: pointer;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .pill input:checked + span {
+    font-weight: 700;
+    color: var(--ink);
+    border-color: var(--gold-light);
+    background: linear-gradient(135deg, var(--gold-light), var(--gold-deep));
+  }
+  .pill input:focus-visible + span { outline: 3px solid var(--cream); outline-offset: 2px; }
+  @media (hover: hover) {
+    .pill input:not(:checked) + span:hover { border-color: var(--gold); background: rgba(212, 175, 90, 0.12); }
+  }
+
+  .field label { display: block; margin-bottom: 6px; font-size: 0.98rem; font-weight: 600; }
+  .field .opt { font-weight: 400; color: var(--cream-muted); }
+  .field input[type="text"],
+  .field textarea,
+  .result textarea {
+    width: 100%;
+    padding: 12px 14px;
+    font: inherit;
+    font-size: 1rem; /* 16px stops phones zooming in on focus */
+    line-height: 1.5;
+    color: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.35);
+  }
+  .field textarea { min-height: 84px; resize: vertical; }
+  .result textarea { min-height: 150px; resize: vertical; }
+  .field input:focus, .field textarea:focus, .result textarea:focus {
+    outline: 3px solid rgba(246, 236, 217, 0.55);
+    outline-offset: 1px;
+    border-color: var(--gold);
+  }
+  ::placeholder { color: #9A8D77; opacity: 1; }
+
+  .checks { display: grid; gap: 4px; }
+  .check { display: flex; align-items: center; gap: 12px; min-height: 44px; font-size: 0.95rem; cursor: pointer; }
+  .check input { flex: none; width: 22px; height: 22px; accent-color: var(--gold); }
+
+  .hbtn {
+    appearance: none;
+    min-height: 52px;
+    padding: 12px 20px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    border: 0;
+    border-radius: 14px;
+    transition: transform 0.2s ease, filter 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+  .hbtn:focus-visible { outline: 3px solid var(--cream); outline-offset: 3px; }
+  .hbtn--primary {
+    color: var(--ink);
+    background: linear-gradient(135deg, var(--gold-light), var(--gold) 55%, var(--gold-deep));
+    box-shadow: 0 10px 22px -12px rgba(212, 175, 90, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+  .hbtn--ghost { color: var(--cream); background: transparent; border: 1px solid var(--line); }
+  @media (hover: hover) {
+    .hbtn--primary:hover { transform: translateY(-2px); filter: brightness(1.07); }
+    .hbtn--ghost:hover { border-color: var(--gold); background: rgba(212, 175, 90, 0.1); }
+  }
+  .hrow { display: flex; flex-wrap: wrap; gap: 10px; }
+  .hrow .hbtn { flex: 1 1 140px; }
+  .hrow .hbtn--primary { flex: 2 1 150px; padding-left: 14px; padding-right: 14px; }
+  .hrow .hbtn[type="reset"] { flex: 1 1 80px; padding-left: 14px; padding-right: 14px; }
+
+  .status { min-height: 1.4em; margin: 0; font-size: 0.92rem; color: var(--gold-light); }
+
+  .result {
+    display: grid;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(212, 175, 90, 0.06);
+  }
+  .result[hidden] { display: none; }
+  .result h3 { margin: 0; font-family: var(--serif); font-size: 1.2rem; color: var(--gold); }
+  .result .hint { margin: 0; font-size: 0.9rem; color: var(--cream-muted); }
+  .go { display: grid; gap: 10px; }
+  .btn--sm { min-height: 64px; justify-content: center; text-align: center; }
+  .btn--sm .label { flex: 0 1 auto; text-align: center; }
+
+  /* Roomier buttons on tablets and desktops */
+  @media (min-width: 600px) {
+    .btn { gap: 16px; padding: 14px 22px; }
+    .icon { width: 52px; height: 52px; }
+    .icon--google svg { width: 27px; height: 27px; }
+    .icon--zomato { border-radius: 14px; }
+    .arrow { width: 22px; height: 22px; }
+  }
+  /* Very small phones: keep the button label on one line */
+  @media (max-width: 380px) {
+    .arrow { display: none; }
+  }
+  /* Short laptop screens: tighten spacing so both buttons stay above the fold */
+  @media (min-width: 600px) and (max-height: 860px) {
+    .page { gap: 18px; }
+    .card { padding-top: 30px; padding-bottom: 28px; }
+    .logo { width: 170px; margin-bottom: 16px; }
+    .brand { margin-bottom: 6px; }
+    h1 { margin-bottom: 10px; }
+    .divider { margin: 18px auto 20px; }
+    .note { margin-top: 16px; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card { animation: rise 0.7s ease both; }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn, .arrow { transition: none; }
+  }
+</style>
+</head>
+
+<body>
+  <div class="bg" aria-hidden="true"></div>
+
+  <div class="page">
+    <main class="card">
+
+      <!-- Official logo. Save your logo as "feel-in-saudia-logo.png" in the same folder as this file.
+           If the image is missing, the page falls back to the text name below. -->
+      <figure class="logo">
+        <img src="feel-in-saudia-logo.png" width="331" height="322"
+             alt="Feel In Saudia official logo"
+             onerror="this.parentNode.hidden=true">
+      </figure>
+
+      <p class="brand">Feel In Saudia</p>
+
+      <h1>How Was Your Experience?</h1>
+      <p class="sub">Thank you for dining with us! Your feedback means a lot to us and helps us serve you better.</p>
+
+      <div class="divider" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+          <!-- fork -->
+          <path d="M7 4v7a3 3 0 0 0 6 0V4"/>
+          <path d="M10 4v24"/>
+          <!-- spoon -->
+          <ellipse cx="22" cy="9.5" rx="3.6" ry="5.5"/>
+          <path d="M22 15v13"/>
+        </svg>
+      </div>
+
+      <div class="actions">
+
+        <!-- GOOGLE REVIEWS -->
+        <a class="btn" href="https://g.page/r/CfhV481YE_NHEAE/review" target="_blank" rel="noopener noreferrer">
+          <span class="icon icon--google" aria-hidden="true">
+            <svg viewBox="0 0 48 48" focusable="false">
+              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            </svg>
+          </span>
+          <span class="label">
+            <strong>Review Us on Google</strong>
+            <small>Opens in a new tab</small>
+          </span>
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M7 17L17 7"/><path d="M8.5 7H17v8.5"/>
+          </svg>
+        </a>
+
+        <!-- ZOMATO REVIEWS -->
+        <a class="btn" href="https://link.zomato.com/xqzv/rshare?id=1506575453f7b9174" target="_blank" rel="noopener noreferrer">
+          <span class="icon icon--zomato" aria-hidden="true">
+            <svg viewBox="0 0 48 48" focusable="false">
+              <path fill="#FFFFFF" transform="translate(4.2 0) skewX(-10)" d="M14 15H34V19.2L21.6 28.8H34V33H14V28.8L26.4 19.2H14Z"/>
+            </svg>
+          </span>
+          <span class="label">
+            <strong>Review Us on Zomato</strong>
+            <small>Opens in a new tab</small>
+          </span>
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M7 17L17 7"/><path d="M8.5 7H17v8.5"/>
+          </svg>
+        </a>
+
+      </div>
+
+      <p class="note">Choose whichever platform you prefer.</p>
+
+      <!-- REVIEW HELPER: builds a draft from the customer's own answers (runs in the browser, nothing is sent anywhere) -->
+      <section class="helper" aria-labelledby="helper-title">
+        <details id="helper">
+          <summary>
+            <span class="t">
+              <strong id="helper-title">Need help with the words?</strong>
+              <small>Tell us about your visit and get a draft to edit and post.</small>
+            </span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </summary>
+
+          <form class="hform" id="helper-form" novalidate>
+            <p class="lead">Tap what applies to your visit and skip anything you'd rather not mention. Your answers become a short review that you can change before you post it.</p>
+
+            <fieldset class="aspect">
+              <legend>Food</legend>
+              <div class="pills">
+                <label class="pill"><input class="vh" type="radio" name="food" value="loved"><span>Loved it</span></label>
+                <label class="pill"><input class="vh" type="radio" name="food" value="good"><span>Good</span></label>
+                <label class="pill"><input class="vh" type="radio" name="food" value="improve"><span>Could be better</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="aspect">
+              <legend>Service</legend>
+              <div class="pills">
+                <label class="pill"><input class="vh" type="radio" name="service" value="loved"><span>Loved it</span></label>
+                <label class="pill"><input class="vh" type="radio" name="service" value="good"><span>Good</span></label>
+                <label class="pill"><input class="vh" type="radio" name="service" value="improve"><span>Could be better</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="aspect">
+              <legend>Ambience</legend>
+              <div class="pills">
+                <label class="pill"><input class="vh" type="radio" name="ambience" value="loved"><span>Loved it</span></label>
+                <label class="pill"><input class="vh" type="radio" name="ambience" value="good"><span>Good</span></label>
+                <label class="pill"><input class="vh" type="radio" name="ambience" value="improve"><span>Could be better</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="aspect">
+              <legend>Cleanliness</legend>
+              <div class="pills">
+                <label class="pill"><input class="vh" type="radio" name="cleanliness" value="loved"><span>Loved it</span></label>
+                <label class="pill"><input class="vh" type="radio" name="cleanliness" value="good"><span>Good</span></label>
+                <label class="pill"><input class="vh" type="radio" name="cleanliness" value="improve"><span>Could be better</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="aspect">
+              <legend>Value for money</legend>
+              <div class="pills">
+                <label class="pill"><input class="vh" type="radio" name="value" value="loved"><span>Loved it</span></label>
+                <label class="pill"><input class="vh" type="radio" name="value" value="good"><span>Good</span></label>
+                <label class="pill"><input class="vh" type="radio" name="value" value="improve"><span>Could be better</span></label>
+              </div>
+            </fieldset>
+
+            <div class="field">
+              <label for="dishes">What did you order? <span class="opt">(optional)</span></label>
+              <input id="dishes" type="text" maxlength="100" autocomplete="off" placeholder="Type the dishes you had">
+            </div>
+
+            <div class="field">
+              <label for="extra">Anything else to add? <span class="opt">(optional)</span></label>
+              <textarea id="extra" maxlength="250" placeholder="Your own words go straight into the review"></textarea>
+            </div>
+
+            <fieldset class="aspect">
+              <legend>Length</legend>
+              <div class="pills">
+                <label class="pill"><input class="vh" type="radio" name="len" value="short" checked><span>Short</span></label>
+                <label class="pill"><input class="vh" type="radio" name="len" value="detailed"><span>Detailed</span></label>
+              </div>
+            </fieldset>
+
+            <div class="checks">
+              <label class="check"><input type="checkbox" id="c-rec"> I'd recommend it to friends and family</label>
+              <label class="check"><input type="checkbox" id="c-again"> I'd like to visit again</label>
+            </div>
+
+            <div class="hrow">
+              <button class="hbtn hbtn--primary" type="submit">Create my review</button>
+              <button class="hbtn hbtn--ghost" type="reset">Clear</button>
+            </div>
+            <p class="status" id="msg" role="status" aria-live="polite"></p>
+
+            <div class="result" id="result" hidden>
+              <h3>Your draft</h3>
+              <p class="hint">Edit it so it sounds like you, then choose your own star rating on the review page.</p>
+              <label class="vh" for="draft">Review draft</label>
+              <textarea id="draft" rows="7"></textarea>
+              <div class="hrow">
+                <button class="hbtn hbtn--ghost" type="button" id="copy">Copy review</button>
+                <button class="hbtn hbtn--ghost" type="button" id="regen">Write another version</button>
+              </div>
+              <div class="go">
+                <a class="btn btn--sm" id="go-google" href="https://g.page/r/CfhV481YE_NHEAE/review" target="_blank" rel="noopener noreferrer">
+                  <span class="label"><strong>Copy &amp; open Google</strong><small>Opens in a new tab</small></span>
+                </a>
+                <a class="btn btn--sm" id="go-zomato" href="https://link.zomato.com/xqzv/rshare?id=1506575453f7b9174" target="_blank" rel="noopener noreferrer">
+                  <span class="label"><strong>Copy &amp; open Zomato</strong><small>Opens in a new tab</small></span>
+                </a>
+              </div>
+              <p class="status" id="copy-msg" role="status" aria-live="polite"></p>
+              <p class="hint">Please post only what matches your own visit. Your answers stay on your device.</p>
+            </div>
+          </form>
+        </details>
+      </section>
+    </main>
+
+    <footer class="footer">Digital Experience by <span>FoodBiz Digital Solutions</span></footer>
+  </div>
+
+<script>
+  /* Review helper: turns the customer's own answers into an editable draft.
+     Runs entirely in the browser. Nothing is sent or stored anywhere. */
+  (function () {
+    var form = document.getElementById("helper-form");
+    if (!form) { return; }
+
+    var NAME = "Feel In Saudia";
+    var draft = document.getElementById("draft");
+    var result = document.getElementById("result");
+    var msg = document.getElementById("msg");
+    var copyMsg = document.getElementById("copy-msg");
+    var lastGenerated = "";
+
+    var ASPECTS = [
+      { key: "food", label: "food",
+        loved: ["The food was delicious and full of flavour.", "I really loved the food.", "The food was the highlight for me."],
+        good: ["The food was good.", "The food was tasty and satisfying.", "I enjoyed the food."],
+        improve: ["The food could be better.", "I felt the food had room for improvement."] },
+      { key: "service", label: "service",
+        loved: ["Service was excellent, and the team was friendly and helpful.", "The staff were warm and attentive.", "Really friendly service."],
+        good: ["Service was good and the staff were polite.", "The staff were courteous."],
+        improve: ["Service could be better.", "I felt the service had room for improvement."] },
+      { key: "ambience", label: "ambience",
+        loved: ["The ambience is lovely and welcoming.", "A lovely, welcoming atmosphere."],
+        good: ["The ambience was pleasant.", "A pleasant atmosphere."],
+        improve: ["The ambience could be better.", "I felt the ambience had room for improvement."] },
+      { key: "cleanliness", label: "cleanliness",
+        loved: ["The place was spotless and well kept.", "Everything was clean and well maintained."],
+        good: ["The place was clean and tidy.", "Clean and tidy."],
+        improve: ["Cleanliness could be better.", "I felt cleanliness had room for improvement."] },
+      { key: "value", label: "value for money",
+        loved: ["Great value for money.", "Prices felt very reasonable for what I got."],
+        good: ["Fair value for the price.", "Reasonable value for money."],
+        improve: ["Value for money could be better.", "I felt the pricing could be better for what I got."] }
+    ];
+
+    /* Short version: aspects with the same answer are grouped into one sentence. {L} = the list. */
+    var GROUP = {
+      loved: ["I was really happy with the {L}.", "The {L} stood out for me.", "Really impressed with the {L}."],
+      good: ["I found the {L} good.", "I was satisfied with the {L}."],
+      improve: ["The {L} could be better.", "I felt the {L} had room for improvement.", "The {L} could use some improvement."]
+    };
+
+    var OPEN = {
+      positive: ["A really enjoyable meal at " + NAME + ".", "Had a lovely dining experience at " + NAME + ".", "Glad I visited " + NAME + ".", "A pleasant visit to " + NAME + "."],
+      mixed: ["A mixed experience at " + NAME + ", with some good moments and a few things to improve.", "My visit to " + NAME + " had things to like and things that could be better."],
+      negative: ["My visit to " + NAME + " did not quite live up to my expectations.", "I was a little disappointed with my visit to " + NAME + "."],
+      neutral: ["Sharing my experience at " + NAME + ".", "Here is my feedback on my visit to " + NAME + "."]
+    };
+    var DISH = ["I ordered {D}.", "I tried {D}."];
+    var REC = ["I would happily recommend it to friends and family.", "Would recommend it to anyone looking for a good meal out.", "Definitely recommended."];
+    var AGAIN = ["I would like to visit again.", "Looking forward to visiting again.", "I would be happy to come back."];
+    var HOPE = ["Hopefully the team can work on these points.", "I hope these points help the team improve."];
+
+    function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
+    function tidy(s) { return s.replace(/\s+/g, " ").trim(); }
+    function sentence(s) {
+      s = tidy(s);
+      s = s.charAt(0).toUpperCase() + s.slice(1);
+      return /[.!?؟]$/.test(s) ? s : s + ".";
+    }
+    function joinList(items) {
+      if (items.length === 1) { return items[0]; }
+      return items.slice(0, -1).join(", ") + " and " + items[items.length - 1];
+    }
+    function answer(name) {
+      var el = form.querySelector('input[name="' + name + '"]:checked');
+      return el ? el.value : "";
+    }
+
+    function compose() {
+      var by = { loved: [], good: [], improve: [] };
+      ASPECTS.forEach(function (a) { var v = answer(a.key); if (v) { by[v].push(a); } });
+
+      var dishes = tidy(document.getElementById("dishes").value).replace(/[.,;!\s]+$/, "");
+      var extra = tidy(document.getElementById("extra").value);
+      var wantsRec = document.getElementById("c-rec").checked;
+      var wantsAgain = document.getElementById("c-again").checked;
+      var detailed = answer("len") === "detailed";
+      var positives = by.loved.length + by.good.length;
+      var issues = by.improve.length;
+
+      if (!positives && !issues && !dishes && !extra && !wantsRec && !wantsAgain) { return ""; }
+
+      var tone = (!positives && !issues) ? "neutral" : !issues ? "positive" : !positives ? "negative" : "mixed";
+      var parts = [pick(OPEN[tone])];
+
+      ["loved", "good", "improve"].forEach(function (level) {
+        if (!by[level].length) { return; }
+        if (detailed) {
+          /* walk through each aspect's phrasings in turn so neighbouring sentences are worded differently */
+          var start = Math.floor(Math.random() * 100);
+          by[level].forEach(function (a, i) { parts.push(a[level][(start + i) % a[level].length]); });
+        } else {
+          var list = joinList(by[level].map(function (a) { return a.label; }));
+          parts.push(pick(GROUP[level]).replace("{L}", function () { return list; }));
+        }
+      });
+
+      if (dishes) { parts.push(pick(DISH).replace("{D}", function () { return dishes; })); }
+      if (extra) { parts.push(sentence(extra)); }
+      if (wantsRec) { parts.push(pick(REC)); }
+      if (wantsAgain) { parts.push(pick(AGAIN)); }
+      if (issues) { parts.push(pick(HOPE)); }
+      return parts.join(" ");
+    }
+
+    function generate(avoid) {
+      var text = "", tries = 0;
+      do { text = compose(); tries++; } while (text && text === avoid && tries < 8);
+      return text;
+    }
+
+    function showDraft(text) {
+      lastGenerated = text;
+      draft.value = text;
+      result.hidden = false;
+      msg.textContent = "";
+      copyMsg.textContent = "";
+      var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      result.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "nearest" });
+    }
+
+    function copyDraft() {
+      var text = draft.value, ok = false, wasReadOnly = draft.readOnly;
+      try {
+        draft.readOnly = true; /* keeps the phone keyboard from popping up */
+        draft.focus({ preventScroll: true });
+        draft.select();
+        draft.setSelectionRange(0, text.length);
+        ok = document.execCommand("copy");
+      } catch (err) { ok = false; }
+      draft.readOnly = wasReadOnly;
+
+      var done = "Copied! Paste it into the review box and choose your star rating.";
+      var fail = "Could not copy automatically. Press and hold the draft, choose Select all, then Copy.";
+      if (ok) { copyMsg.textContent = done; return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(
+          function () { copyMsg.textContent = done; },
+          function () { copyMsg.textContent = fail; }
+        );
+      } else {
+        copyMsg.textContent = fail;
+      }
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var text = generate("");
+      if (!text) { msg.textContent = "Pick at least one thing to mention, or add a few words of your own."; return; }
+      showDraft(text);
+    });
+
+    document.getElementById("regen").addEventListener("click", function () {
+      if (draft.value !== lastGenerated && !window.confirm("Replace your edited draft with a new version?")) { return; }
+      var text = generate(lastGenerated);
+      if (text) { showDraft(text); }
+    });
+
+    document.getElementById("copy").addEventListener("click", copyDraft);
+    /* The two links still open the review page in a new tab; this just copies the draft first. */
+    document.getElementById("go-google").addEventListener("click", copyDraft);
+    document.getElementById("go-zomato").addEventListener("click", copyDraft);
+
+    form.addEventListener("reset", function () {
+      setTimeout(function () {
+        result.hidden = true;
+        draft.value = "";
+        lastGenerated = "";
+        msg.textContent = "";
+        copyMsg.textContent = "";
+      }, 0);
+    });
+  })();
+</script>
+</body>
+</html>
